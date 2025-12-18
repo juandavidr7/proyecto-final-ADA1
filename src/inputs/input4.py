@@ -23,33 +23,35 @@ def obtener_datos():
     j15 = Jugador(15, "Sebastian Perez", 24, 59)
     j16 = Jugador(16, "Daniela Morales", 23, 77)
 
+    # Importante: no reutilizar el mismo jugador en múltiples equipos/sedes.
+    # Aquí se distribuyen los 16 jugadores (IDs 1..16) en 8 equipos (2 por equipo).
     datos = [
         {
             "nombre": "Sede Bogota",
             "equipos": [
-                {"nombre": "Futbol", "deporte": "Futbol", "jugadores": [j1, j2, j3, j4]},
-                {"nombre": "Basketball", "deporte": "Basketball", "jugadores": [j5, j6]}
+                {"nombre": "Futbol", "deporte": "Futbol", "jugadores": [j1, j2]},
+                {"nombre": "Basketball", "deporte": "Basketball", "jugadores": [j3, j4]},
             ]
         },
         {
             "nombre": "Sede Medellin",
             "equipos": [
-                {"nombre": "Futbol", "deporte": "Futbol", "jugadores": [j7, j8]},
-                {"nombre": "Basketball", "deporte": "Basketball", "jugadores": [j9, j10, j11]}
+                {"nombre": "Futbol", "deporte": "Futbol", "jugadores": [j5, j6]},
+                {"nombre": "Basketball", "deporte": "Basketball", "jugadores": [j7, j8]},
             ]
         },
         {
             "nombre": "Sede Cali",
             "equipos": [
-                {"nombre": "Futbol", "deporte": "Futbol", "jugadores": [j12, j13, j14]},
-                {"nombre": "Basketball", "deporte": "Basketball", "jugadores": [j15, j16]}
+                {"nombre": "Futbol", "deporte": "Futbol", "jugadores": [j9, j10]},
+                {"nombre": "Basketball", "deporte": "Basketball", "jugadores": [j11, j12]},
             ]
         },
         {
             "nombre": "Sede Barranquilla",
             "equipos": [
-                {"nombre": "Natacion", "deporte": "Natacion", "jugadores": [j1, j5, j9, j13]},
-                {"nombre": "Tenis", "deporte": "Tenis", "jugadores": [j2, j6, j10, j14]}
+                {"nombre": "Natacion", "deporte": "Natacion", "jugadores": [j13, j14]},
+                {"nombre": "Tenis", "deporte": "Tenis", "jugadores": [j15, j16]},
             ]
         }
     ]

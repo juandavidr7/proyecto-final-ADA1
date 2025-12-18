@@ -1,8 +1,4 @@
-import time
-
 class VectorDinamico:
-    DELAY_MS = 0.001  # 1ms delay para benchmarking
-    
     def __init__(self):
         self.capacidad = 2
         self.cantidad = 0
@@ -16,7 +12,6 @@ class VectorDinamico:
         self.capacidad = nueva_capacidad
 
     def agregar(self, elemento):
-        time.sleep(VectorDinamico.DELAY_MS)  # Delay para simular procesamiento
         if self.cantidad == self.capacidad:
             self._redimensionar(self.capacidad * 2)
         self.datos[self.cantidad] = elemento

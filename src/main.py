@@ -1,5 +1,6 @@
 from solucion1 import construir_solucion_1
 from solucion2 import construir_solucion_2
+from solucion1 import comparador_jugador, comparador_equipo
 
 # Cambiar el input aquí para usar diferentes datos de prueba
 # from inputs.input1 import obtener_datos
@@ -36,6 +37,7 @@ def calcular_estadisticas(asociacion):
     print(f" ESTADISTICAS GENERALES")
     print(f"{'='*60}")
     
+    # Recolectar jugadores (sin usar sorted()/.sort() de Python)
     todos_jugadores = []
     sedes = asociacion.obtener_elementos()
     for sede in sedes:
@@ -44,8 +46,14 @@ def calcular_estadisticas(asociacion):
             jugadores = equipo.jugadores.obtener_elementos()
             todos_jugadores.extend(jugadores)
     
-    todos_jugadores.sort(key=lambda x: (x.rendimiento, -x.edad))
-    ids_ranking = [str(j.id) for j in todos_jugadores]
+    # Ranking de jugadores: usar MergeSort manual (VectorDinamico.ordenar)
+    from vector_dinamico import VectorDinamico
+    ranking = VectorDinamico()
+    for j in todos_jugadores:
+        ranking.agregar(j)
+    ranking.ordenar(comparador_jugador)
+    jugadores_rank = ranking.obtener_elementos()
+    ids_ranking = [str(j.id) for j in jugadores_rank]
     
     print(f"\nRanking de jugadores (por rendimiento):")
     print("{" + ", ".join(ids_ranking) + "}")
@@ -59,23 +67,41 @@ def calcular_estadisticas(asociacion):
         for eq in equipos:
             todos_equipos.append((eq, sede.nombre))
     
-    todos_equipos.sort(key=lambda x: (x[0].get_promedio_rendimiento(), -x[0].get_cantidad_jugadores()))
-    
+    # Equipo con mayor/menor rendimiento: recorrido lineal (no requiere ordenar toda la lista)
     equipo_min = todos_equipos[0]
-    equipo_max = todos_equipos[-1]
+    equipo_max = todos_equipos[0]
+    for item in todos_equipos[1:]:
+        eq, _sede = item
+        # item va antes que equipo_min => es "menor" según el criterio del proyecto
+        if comparador_equipo(eq, equipo_min[0]):
+            equipo_min = item
+        # equipo_max va antes que item => item es "mayor"
+        if comparador_equipo(equipo_max[0], eq):
+            equipo_max = item
     
     print(f"\nEquipo con MAYOR rendimiento: {equipo_max[0].nombre} ({equipo_max[1]}) - {equipo_max[0].get_promedio_rendimiento():.2f}")
     print(f"Equipo con MENOR rendimiento: {equipo_min[0].nombre} ({equipo_min[1]}) - {equipo_min[0].get_promedio_rendimiento():.2f}")
 
-    jug_max = todos_jugadores[-1]
-    jug_min = todos_jugadores[0]
+    # Jugador con mayor/menor rendimiento: recorrido lineal con el comparador del proyecto
+    jug_min = jugadores_rank[0]
+    jug_max = jugadores_rank[0]
+    for j in jugadores_rank[1:]:
+        if comparador_jugador(j, jug_min):
+            jug_min = j
+        if comparador_jugador(jug_max, j):
+            jug_max = j
     
     print(f"\nJugador con MAYOR rendimiento: {{ {jug_max.id}, {jug_max.nombre}, {jug_max.rendimiento} }}")
     print(f"Jugador con MENOR rendimiento: {{ {jug_min.id}, {jug_min.nombre}, {jug_min.rendimiento} }}")
 
-    todos_jugadores_edad = sorted(todos_jugadores, key=lambda x: x.edad)
-    jug_joven = todos_jugadores_edad[0]
-    jug_veterano = todos_jugadores_edad[-1]
+    # Jugador más joven / más veterano: recorrido lineal (evita sorted())
+    jug_joven = todos_jugadores[0]
+    jug_veterano = todos_jugadores[0]
+    for j in todos_jugadores[1:]:
+        if j.edad < jug_joven.edad:
+            jug_joven = j
+        if j.edad > jug_veterano.edad:
+            jug_veterano = j
 
     print(f"\nJugador MAS JOVEN: {{ {jug_joven.id}, {jug_joven.nombre}, {jug_joven.edad} años }}")
     print(f"Jugador MAS VETERANO: {{ {jug_veterano.id}, {jug_veterano.nombre}, {jug_veterano.edad} años }}")

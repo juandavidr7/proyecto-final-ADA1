@@ -1,4 +1,3 @@
-import time
 from vector_dinamico import VectorDinamico
 
 class NodoRB:
@@ -10,8 +9,6 @@ class NodoRB:
         self.padre = None
 
 class ArbolRojinegro:
-    DELAY_MS = 0.001  # 1ms delay para benchmarking
-    
     def __init__(self):
         self.raiz = None
         self.cantidad = 0
@@ -95,7 +92,6 @@ class ArbolRojinegro:
         self.raiz.color = "NEGRO"
 
     def insertar(self, data, comparador):
-        time.sleep(ArbolRojinegro.DELAY_MS)  # Delay para simular procesamiento
         ptr = NodoRB(data)
         self.raiz = self._insertar_bst(self.raiz, ptr, comparador)
         self._arreglar_insercion(ptr)

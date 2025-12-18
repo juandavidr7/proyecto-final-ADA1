@@ -48,12 +48,19 @@ class Sede:
             self.equipos.agregar(equipo)
 
     def get_promedio_rendimiento(self):
-        lista = self.equipos.obtener_elementos()
-        if not lista or len(lista) == 0:
+        # Promedio de rendimientos de todos los jugadores de la sede (ponderado por cantidad de jugadores).
+        equipos = self.equipos.obtener_elementos()
+        if not equipos:
             return 0.0
-        
-        suma = sum(e.get_promedio_rendimiento() for e in lista)
-        return suma / len(lista)
+
+        suma_rend = 0
+        total_jug = 0
+        for e in equipos:
+            jugadores = e.jugadores.obtener_elementos()
+            total_jug += len(jugadores)
+            suma_rend += sum(j.rendimiento for j in jugadores)
+
+        return (suma_rend / total_jug) if total_jug > 0 else 0.0
 
     def get_total_jugadores(self):
         lista = self.equipos.obtener_elementos()
